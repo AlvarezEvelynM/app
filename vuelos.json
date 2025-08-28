@@ -1,19 +1,7 @@
 [
     {
-        "id": 1,
-        "destino": "buenos aires",
-        "Capacidad de pasajeros": 100,
-        "Cantidad de pasajes vendidos": 0
-    },
-    {
         "id": 2,
         "destino": "brasil",
-        "Capacidad de pasajeros": 100,
-        "Cantidad de pasajes vendidos": 0
-    },
-    {
-        "id": 3,
-        "destino": "paraguay",
         "Capacidad de pasajeros": 100,
         "Cantidad de pasajes vendidos": 0
     },
@@ -22,6 +10,11 @@
         "destino": "alemania",
         "Capacidad de pasajeros": 100,
         "Cantidad de pasajes vendidos": 0
+    },
+    {
+        "id": 5,
+        "destino": "rumania",
+        "Capacidad de pasajeros": 100,
+        "Cantidad de pasajes vendidos": 0
     }
-    
 ]

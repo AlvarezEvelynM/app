@@ -21,14 +21,14 @@ def guardar_datos(datos):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(datos, f, indent=4, ensure_ascii=False)
 
-    
+#------------------------------------------------------------------------------------------------------------------------------------------    
 # Consigna 1:
 # Crea un endpoint de inicio GET / que retorne:
 # {"mensaje": "API de Vuelos"} en formato JSON
 @app.route("/", methods=["GET"])
 def inicio():
     return jsonify({"mensaje": "API de Vuelos"})
-
+#------------------------------------------------------------------------------------------------------------------------------------------
 # Consigna 2:
 # Crea un endpoint GET /api/vuelos que:
 # 1. Cargue todos los datos usando cargar_datos()
@@ -40,7 +40,7 @@ def listar_vuelos():
     for item in datos:
         item["destino"] = item["destino"].title()
     return jsonify(datos)
-
+#------------------------------------------------------------------------------------------------------------------------------------------
 # Consigna 3:
 # Crea un endpoint GET /api/vuelos/<int:vuelo_id> que:
 # 1. Cargue todos los datos
@@ -56,7 +56,7 @@ def obtener_vuelo(vuelo_id):
             item["destino"] = item["destino"].title()
             return jsonify(item)
     return jsonify({"error": "Vuelo no encontrado"}), 404
-
+#------------------------------------------------------------------------------------------------------------------------------------------
 # Consigna 4:
 # Crea un endpoint POST /api/vuelos que:
 # 1. Obtenga los datos JSON de la petición con request.get_json()
@@ -86,7 +86,7 @@ def agregar_vuelo():
    datos.append(nuevo_vuelo)
    guardar_datos(datos)
    return jsonify(nuevo_vuelo), 201
-
+#------------------------------------------------------------------------------------------------------------------------------------------
 # Consigna 5:
 # Crea un endpoint PUT /api/vuelos/<int:vuelo_id> que:
 # 1. Obtenga los datos JSON de la petición
@@ -100,20 +100,20 @@ def agregar_vuelo():
 @app.route("/api/vuelos/<int:vuelo_id>", methods=["PUT"])
 def actualizar_vuelo(vuelo_id):
     datos = cargar_datos()
-    vuelo_id = request.get_json()
+    nuevos_datos = request.get_json()
 
     for vuelo in datos:
         if vuelo["id"] == vuelo_id:
             vuelo.update({
-                "destino": vuelo_id.get("destino", vuelo["destino"].title),
-                "Capacidad de pasajeros": int(vuelo_id.get("Capacidad de pasajeros", vuelo["Capacidad de pasajeros"])),
-                "Cantidad de pasajes vendidos": int(vuelo_id.get("Cantidad de pasajes vendidos", vuelo["Cantidad de pasajes vendidos"]))
+                "destino": nuevos_datos.get("destino", vuelo["destino"].lower()),
+                "Capacidad de pasajeros": int(nuevos_datos.get("Capacidad de pasajeros", vuelo["Capacidad de pasajeros"])),
+                "Cantidad de pasajes vendidos": int(nuevos_datos.get("Cantidad de pasajes vendidos", vuelo["Cantidad de pasajes vendidos"]))
             })
             
             guardar_datos(datos)
             return jsonify(vuelo)
     return jsonify({"error": "Vuelo no encontrado"}), 404
-
+#------------------------------------------------------------------------------------------------------------------------------------------
 # Consigna 6:
 # Crea un endpoint DELETE /api/vuelos/<int:vuelo_id> que:
 # 1. Cargue todos los datos
@@ -124,8 +124,15 @@ def actualizar_vuelo(vuelo_id):
 # 6. Retorne {"mensaje": f"Vuelo {vuelo_id} eliminado correctamente"}
 @app.route("/api/vuelos/<int:vuelo_id>", methods=["DELETE"])
 def eliminar_vuelo(vuelo_id):
-    pass
+    datos = cargar_datos()
+    nuevos_datos = [item for item in datos if item["id"] != vuelo_id]
 
+    if len(nuevos_datos) == len(datos):
+        return jsonify({"error": "vuelo no encontrado"}), 404
+
+    guardar_datos(nuevos_datos)
+    return jsonify({"mensaje": f"vuelo {vuelo_id} eliminado correctamente"})
+#------------------------------------------------------------------------------------------------------------------------------------------
 # Consigna 7:
 # Crear un endpoint POST /vender que:
 # 1. Obtenga los datos JSON de la petición.
@@ -146,8 +153,10 @@ def eliminar_vuelo(vuelo_id):
 # 7. Devuelva el vuelo actualizado en formato JSON.
 @app.route("/api/vender", methods=["POST"])
 def vender_vuelo():
-    pass
-
+    datos = cargar_datos()
+    nuevos_datos = request.get_json()
+   
+#------------------------------------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     if not os.path.exists(DATA_FILE):
         guardar_datos([])
