@@ -153,8 +153,23 @@ def eliminar_vuelo(vuelo_id):
 # 7. Devuelva el vuelo actualizado en formato JSON.
 @app.route("/api/vender", methods=["POST"])
 def vender_vuelo():
-    datos = cargar_datos()
-    nuevos_datos = request.get_json()
+    datos2 = cargar_datos()
+    datos = request.get_json()
+    vuelo_id = datos.get("id")
+    for item in datos2:
+        
+        if item.get("id")== vuelo_id:
+           
+           if item["Cantidad de pasajes vendidos"] < item["Capacidad de pasajeros"]:
+                item["Cantidad de pasajes vendidos"] += 1  
+                guardar_datos(datos2)  
+                return jsonify({"mensaje": "Pasaje vendido"})
+           
+           else:
+                return jsonify({"error": "Vuelo completo"}), 400  
+           
+    return jsonify({"mensaje": f"error: vuelo no encontrado"}), 404
+
    
 #------------------------------------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
