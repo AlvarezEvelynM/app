@@ -1,9 +1,15 @@
 [
     {
+        "id": 1,
+        "destino": "buenos aires",
+        "Capacidad de pasajeros": 100,
+        "Cantidad de pasajes vendidos": 100
+    },
+    {
         "id": 2,
         "destino": "brasil",
         "Capacidad de pasajeros": 100,
-        "Cantidad de pasajes vendidos": 100
+        "Cantidad de pasajes vendidos": 40
     },
     {
         "id": 4,
